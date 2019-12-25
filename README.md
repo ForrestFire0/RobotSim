@@ -10,6 +10,8 @@ Step 2:
     Remove the import of the old NavX. (Started with edu)
     Add import for new NavX (Sample -> Emulator -> AHRS)
     
+  If the import doesnt exist, you might have to make it yourself! Its pretty easy:
+    Just make a class that emulates the behavior of the class you are copying. Then, either System.out.println that stuff (cuz thats easy)     or do a lot of work to put it into the Robot State class.
 Step 3:
   Compile and run Sample -> Main.
   
