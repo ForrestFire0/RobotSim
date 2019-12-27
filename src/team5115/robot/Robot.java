@@ -52,12 +52,4 @@ public class Robot {
     }
 }
 
-/**
- * When the button is pressed,
- * Look for the target. If found,
- * Generate path to target, based on data currently found / averaged.
- * We have a path found. This path describes the angle we need to hold for this current angle. We use this curve, find the angle we want when in the position we are, then go to that angle. Forget the path.
- *
- */
-
 

@@ -6,18 +6,18 @@ import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
 
-public class PG {
+public class GridPaneGenerator {
 
-    static GridPane gridPane = new GridPane();
-    static ArrayList<TextField> textFields = new ArrayList<>();
-    static ArrayList<CheckBox> checkBoxes = new ArrayList<>();
-    static int currentRow = 0;
+    GridPane gridPane = new GridPane();
+    ArrayList<TextField> textFields = new ArrayList<>();
+    ArrayList<CheckBox> checkBoxes = new ArrayList<>();
+    int currentRow = 0;
 
-    public static GridPane getGridPane() {
+    public GridPane generate() {
         return gridPane;
     }
 
-    public static void add(String name, double defaultVal, boolean isChecked) {
+    public void add(String name, double defaultVal, boolean isChecked) {
 
         TextField textField = new TextField(String.valueOf(defaultVal));
         textFields.add(textField); //adds the text field to the array list.
@@ -46,13 +46,13 @@ public class PG {
         currentRow++;
     }
 
-    public static TextField get(String name) {
+    public TextField get(String name) {
         //returns the text field with the given name
         for (int i = 0; i < checkBoxes.size(); i++) {
             CheckBox x = checkBoxes.get(i);
             if (x.getText().equals(name)) return textFields.get(i);
         }
-        System.out.println("You fucked up. Tryna get " + name + " and we couldn't find it.");
-        return new TextField("Null");
+        System.err.println("You fucked up. Tryna get " + name + " and we couldn't find it.");
+        return new TextField("0");
     }
 }

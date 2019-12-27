@@ -9,10 +9,20 @@ public class MyTalonSRX {
     boolean hasEncoder;
     boolean isFollower;
 
+    public static double getRequestedAngle() {
+        return requestedAngle;
+    }
+
+    public static void setRequestedAngle(double requestedAngle) {
+        MyTalonSRX.requestedAngle = requestedAngle;
+    }
+
+    static double requestedAngle;
     static ArrayList<MyTalonSRX> talonSRXES = new ArrayList<>();
     static ArrayList<Integer> encoders = new ArrayList<>();
 
     public MyTalonSRX(int port) {
+        this.port = port;
         talonSRXES.add(this);
     }
 

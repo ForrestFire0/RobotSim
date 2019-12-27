@@ -70,6 +70,7 @@ public class Drivetrain implements DriveBase {
     @Override
     public void angleHold(double currentAngle, double targetAngle, double y) {
         this.targetAngle = targetAngle;
+        MyTalonSRX.setRequestedAngle(targetAngle);
         double kP = 0.02;
         //double kD = 0.01; Hey if you are implementing a d part, use the navx.getRate
 

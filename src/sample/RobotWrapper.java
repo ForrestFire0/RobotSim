@@ -17,12 +17,12 @@ public class RobotWrapper {
         MyTalonSRX.setEncoders(srs.getEncoders());
 
         ers = new RobotState();
-
         //run the tick
-        robot.teleopPeriodic();
+        robot.autonomousPeriodic();
 
-        //push everything into the End Robot Stat (Robot state)
+        //push everything into the End Robot State (Robot state)
         ers.setTalonSRXES(MyTalonSRX.getTalonSRXES());
+        ers.setRequestedAngle(MyTalonSRX.getRequestedAngle());
         return ers;
     }
 

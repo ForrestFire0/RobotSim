@@ -41,9 +41,9 @@ public class SimpleAutoSeries {
     }
 
     public static void setCurrentStep(int currentStep) {
-        if(currentStep >= steps.length || currentStep < 0)
-        SimpleAutoSeries.currentStep = currentStep;
-        else System.out.println("Your have attempted to set the current step to something out of bounds.");
+        if(!(currentStep >= steps.length || currentStep < 0)) {
+            SimpleAutoSeries.currentStep = currentStep;
+        } else System.out.println("You have attempted to set the current step to something out of bounds.");
     }
 
 }

@@ -1,5 +1,5 @@
 package sample.Emulator;
 
 public enum FeedbackDevice {
-    CTRE_MagEncoder_Relative;
+    CTRE_MagEncoder_Relative
 }

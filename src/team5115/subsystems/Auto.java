@@ -42,11 +42,10 @@ public class Auto {
             ErrList.reportError(new Exception("Avg speed at start too high. Should be < 0.1, currently: " + dt.getAvgSpd()));
         }
 
-        NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
-        tx = limelight.getEntry("tx"); //Angle in x of degrees
-        ty = limelight.getEntry("ty"); //Angle in y of degrees
-        tv = limelight.getEntry("tv"); //have target? 
-        pipeline = limelight.getEntry("pipeline");
+        tx = new NetworkTableEntry();
+        ty = new NetworkTableEntry();
+        tv = new NetworkTableEntry();
+        pipeline = new NetworkTableEntry();
         pipeline.setNumber(0);
         currentPipeline = 0;
         SimpleAutoSeries.reset();
@@ -216,7 +215,7 @@ public class Auto {
         dt.angleHold(currentAngle, angle, 0);
 //        System.out.println("Current Angle = " + currentAngle);
 //        System.out.println("angle = " + angle);
-//        System.out.println("MaxAngleErro = " + maxAngleError);
+//        System.out.println("MaxAngleError = " + maxAngleError);
         return abs(currentAngle - angle) < maxAngleError; //If we are close to our target.
     }
 

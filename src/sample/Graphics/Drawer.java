@@ -2,6 +2,7 @@ package sample.Graphics;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import sample.Emulator.RobotState;
 
 public class Drawer {
     public static final int windowX = 1298;
@@ -13,7 +14,15 @@ public class Drawer {
         gc.drawImage(image, 205, 34, 1110, 547, 20, 20, windowX, windowY);
     }
 
-    public static void drawRobot(GraphicsContext gc, int x, int y, double rotation) {
+    public static void drawRobot(GraphicsContext gc, RobotState robotState) {
+        double rotation = robotState.getRequestedAngle();
+        double x = robotState.getX();
+        double y = robotState.getY();
+        double temp = y;
+
+        y = x*2 + 20;
+        x = temp*2 + 20;
+
         drawField(gc);
         rotation = Math.toRadians(rotation);
         double[] xPoints = new double[]{

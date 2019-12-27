@@ -2,6 +2,7 @@ package team5115.subsystems;
 
 
 import sample.Emulator.AHRS;
+import sample.Emulator.Port;
 import sample.Emulator.SPI;
 
 public class NavX {
@@ -10,7 +11,7 @@ public class NavX {
     private double yaw; //relative to start, from -180 to 180.
 
     public NavX() {
-        navx = new AHRS(SPI.Port.kMXP);
+        navx = new AHRS(Port.kMXP);
         navx.reset(); //reset to the start orientation
     }
 

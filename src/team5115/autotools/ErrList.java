@@ -3,8 +3,8 @@ package team5115.autotools;
 import java.util.ArrayList;
 
 public class ErrList {
-    static ArrayList<Throwable> errList = new ArrayList<Throwable>();
-    static ArrayList<Integer> count = new ArrayList<Integer>();
+    static ArrayList<Throwable> errList = new ArrayList<>();
+    static ArrayList<Integer> count = new ArrayList<>();
 
     public static void reportError(Throwable err) {
         int index = find(err);
