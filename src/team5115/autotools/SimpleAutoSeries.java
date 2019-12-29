@@ -4,12 +4,12 @@ package team5115.autotools;
 public class SimpleAutoSeries {
 
     //The series of events we need to do.
-    private static Instruction[] steps;
+    private static Instruction[] series;
     private static int currentStep = 0;
 
     public static void reset() {
 
-        steps = new Instruction[]{
+        series = new Instruction[]{
                 new LocationInstruction(0, 120, 90), //Go to a location of interest
                 new LocationInstruction(0, 0, 26), //Go to a location of interest
                 //new CubeInstruction(10, 10), //find a cube. Pick it up.
@@ -23,8 +23,8 @@ public class SimpleAutoSeries {
      * @return current step that we are working on.
      */
     public static Instruction getCurrentStep() {
-        if(currentStep >= steps.length) return null;
-        return steps[currentStep];
+        if(currentStep >= series.length) return null;
+        return series[currentStep];
     }
 
     /**
@@ -32,7 +32,7 @@ public class SimpleAutoSeries {
      */
     public static Instruction getNextStep() {
         currentStep++;
-        if(currentStep >= steps.length) return null;
+        if(currentStep >= series.length) return null;
         return getCurrentStep();
     }
 
@@ -41,7 +41,7 @@ public class SimpleAutoSeries {
     }
 
     public static void setCurrentStep(int currentStep) {
-        if(!(currentStep >= steps.length || currentStep < 0)) {
+        if(!(currentStep >= series.length || currentStep < 0)) {
             SimpleAutoSeries.currentStep = currentStep;
         } else System.out.println("You have attempted to set the current step to something out of bounds.");
     }

@@ -19,11 +19,26 @@ public class MyTalonSRX {
 
     static double requestedAngle;
     static ArrayList<MyTalonSRX> talonSRXES = new ArrayList<>();
-    static ArrayList<Integer> encoders = new ArrayList<>();
+    static ArrayList<Integer> encoders;
 
     public MyTalonSRX(int port) {
+        if (encoders == null) {
+            encoders = new ArrayList<>();
+            encoders.add(1);
+            encoders.add(1);
+            encoders.add(1);
+            encoders.add(1);
+        }
         this.port = port;
+        hasEncoder = false;
         talonSRXES.add(this);
+    }
+
+    public static void printEncoders() {
+        for (Integer x :
+                encoders) {
+            System.out.println(x);
+        }
     }
 
     public void set(ControlMode controlMode, double x) {
@@ -60,6 +75,7 @@ public class MyTalonSRX {
     }
 
     public double getThrottle() {
+        if(isFollower) return leader.getThrottle();
         return throttle;
     }
 
@@ -80,11 +96,10 @@ public class MyTalonSRX {
     }
 
     public void configSelectedFeedbackSensor(FeedbackDevice x) {
-        hasEncoder = false;
+        hasEncoder = true;
     }
 
     public int getSelectedSensorVelocity() {
-        if(hasEncoder) return encoders.get(port);
-        else return 0;
+        return encoders.get(port-1);
     }
 }

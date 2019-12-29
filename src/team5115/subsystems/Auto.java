@@ -227,8 +227,8 @@ public class Auto {
         double deltaX = cos(currentAngle) * forwardSpeed;
         yLoc += deltaY; //adds deltas to total.
         xLoc += deltaX; //adds deltas to total
-//        System.out.println("IMUCalC: CurrentAngle: " + (int) currentAngle + "|yLoc: " + (int) yLoc + "|xLoc: " + (int) xLoc);
-//        System.out.println("Delta X: " + deltaX + "|Delta Y: " + deltaY);
+        System.out.println("IMUCalC: CurrentAngle: " + (int) currentAngle + "|yLoc: " + (int) yLoc + "|xLoc: " + (int) xLoc);
+        System.out.println("Delta X: " + deltaX + "|Delta Y: " + deltaY);
 //        System.out.println("YVelocity: " + forwardSpeed);
     }
 

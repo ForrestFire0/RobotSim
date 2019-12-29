@@ -7,7 +7,7 @@ import sample.Emulator.SPI;
 
 public class NavX {
     private AHRS navx; //turn baby.
-    private double angle; //angle is total accumulated.
+    public double angle; //angle is total accumulated.
     private double yaw; //relative to start, from -180 to 180.
 
     public NavX() {

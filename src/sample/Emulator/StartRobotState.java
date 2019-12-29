@@ -20,7 +20,7 @@ public class StartRobotState {
         encoders.add((int) rightspd);
         encoders.add((int) leftspd);
         encoders.add((int) leftspd);
-
+        System.out.println(rightspd);
     }
 
     public void setEncoders(ArrayList<Integer> encoders) {

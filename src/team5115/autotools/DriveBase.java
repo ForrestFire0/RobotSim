@@ -1,5 +1,8 @@
 package team5115.autotools;
 
+/**
+ * This class is for all who hope to use my Auto code. Since I don't want implementation to be a pain, please implement the following methods.
+ */
 public interface DriveBase {
 
     /**

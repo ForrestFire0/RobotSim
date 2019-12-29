@@ -6,7 +6,7 @@ import team5115.subsystems.*;
 //todome make a calibration method to move it to a certain distance and know the angle.
 public class Robot {
     private Joystick joy;
-    private DriveBase dt;
+    public DriveBase dt;
     private NavX navX;
     private Auto auto;
 
@@ -48,6 +48,7 @@ public class Robot {
     }
 
     public void autonomousPeriodic() {
+        navX.runTick();
         auto.runAuto();
     }
 }
