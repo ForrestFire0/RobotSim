@@ -1,12 +1,15 @@
 package sample.Emulator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.function.BiConsumer;
 
 public class StartRobotState {
     private double currentAngle;
     private double tv;
     private double ty;
     private double tx;
+    private double pipeline = 0;
     private ArrayList<Integer> encoders = new ArrayList<>();
     private Joystick joystick;
 
@@ -45,5 +48,12 @@ public class StartRobotState {
 
     public double getTx() {
         return tx;
+    }
+
+    public void addToList(HashMap<String, Double> list) {
+        list.put("tx", tx);
+        list.put("ty", ty);
+        list.put("tv", tv);
+        list.put("pipeline", pipeline);
     }
 }

@@ -1,12 +1,8 @@
 package sample;
 
-import sample.Emulator.AHRS;
-import sample.Emulator.MyTalonSRX;
-import sample.Emulator.RobotState;
-import sample.Emulator.StartRobotState;
+import sample.Emulator.*;
+import team5115.autotools.ErrList;
 import team5115.autotools.SimpleAutoSeries;
-import team5115.robot.Robot;
-import team5115.subsystems.NavX;
 
 public class RobotWrapper {
 
@@ -23,6 +19,7 @@ public class RobotWrapper {
         //run the tick
         AHRS.angle = srs.getCurrentAngle();
         AHRS.yaw = srs.getCurrentAngle();
+        srs.addToList(NetworkTableEntry.getList());
         robot.autonomousPeriodic();
 
         //push everything into the End Robot State (Robot state)
@@ -30,8 +27,6 @@ public class RobotWrapper {
         double forwardSpeed = robot.dt.getAvgSpd();
         double deltaY = Math.sin(Math.toRadians(currentAngle)) * forwardSpeed; //converts from M/s to inches/sec then * 0.02 seconds to get deltaInches.
         double deltaX = Math.cos(Math.toRadians(currentAngle)) * forwardSpeed;
-        System.out.println(deltaX);
-        System.out.println(deltaY);
         ers.setX(deltaX);
         ers.setY(deltaY);
         ers.setTalonSRXES(MyTalonSRX.getTalonSRXES());
@@ -46,5 +41,9 @@ public class RobotWrapper {
 
     public static void resetAutoSeries() {
         SimpleAutoSeries.reset();
+    }
+
+    public static void printErrList() {
+        ErrList.printErrorList();
     }
 }

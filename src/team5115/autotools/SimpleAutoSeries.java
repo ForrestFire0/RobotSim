@@ -8,14 +8,12 @@ public class SimpleAutoSeries {
     private static int currentStep = 0;
 
     public static void reset() {
-
         series = new Instruction[]{
-                new LocationInstruction(0, 120, 90), //Go to a location of interest
-                new LocationInstruction(0, 0, 26), //Go to a location of interest
-                //new CubeInstruction(10, 10), //find a cube. Pick it up.
+//                new LocationInstruction(0, 120, 90), //Go to a location of interest
+//                new LocationInstruction(0, 0, 26), //Go to a location of interest
+                new CubeInstruction(10, 100), //find a cube. Pick it up.
                 //new PortalInstruction( 0, 0, 180)
         };
-
         setCurrentStep(0);
     }
 

@@ -8,9 +8,10 @@ public class Drawer {
     public static final int windowX = 1298;
     public static final int windowY = 638;
     static final int robotDim = 80;
+    final static Image image = new Image("/frcField.jpeg");
 
     private static void drawField(GraphicsContext gc) {
-        Image image = new Image("/frcField.jpeg");
+        gc.clearRect(0,0,windowX,windowY);
         gc.drawImage(image, 205, 34, 1110, 547, 20, 20, windowX, windowY);
     }
 

@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
 import sample.Emulator.Joystick;
 import sample.Emulator.MyTalonSRX;
 import sample.Emulator.RobotState;
@@ -19,7 +20,6 @@ import sample.Graphics.GridPaneGenerator;
 
 import java.util.ArrayList;
 
-
 public class Main extends Application {
     final Canvas canvas = new Canvas(Drawer.windowX, Drawer.windowY);
     final GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -28,6 +28,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         //Set up inputs
+
         GridPaneGenerator pyspropgen = new GridPaneGenerator();
         pyspropgen.add("X", 40, true);
         pyspropgen.add("Y", 30, true);
@@ -118,9 +119,11 @@ public class Main extends Application {
             //draw the robot.
             Drawer.drawRobot(gc, result);
             //set the values in the outputs
+
             for (MyTalonSRX x : talonSRXES) {
                 wheeloutputsGen.get("TalonSRX@prt" + x.getPort()).setText(String.valueOf(x.getThrottle()));
             }
+
         });
 
         Button resetSeries = new Button("Reset Auto Series");
@@ -152,7 +155,13 @@ public class Main extends Application {
         inputOrReported.setOnAction(e -> autoMove = !autoMove);
         inputOrReported.setSelected(true);
 
+        Button printErrors = new Button("Print Errors");
+        printErrors.setTooltip(new Tooltip("Press to print out the errors from ErrList to the println"));
+        inputOrReported.setOnAction(e -> RobotWrapper.printErrList()
+        );
+
         HBox buttons = new HBox(runTick, resetSeries, setEncoderVals);
+        HBox moreButtons = new HBox(inputOrReported, printErrors);
 
         Label welcomeLabel = new Label("Welcome to RobotSim!");
         welcomeLabel.setFont(new Font(30));
@@ -162,7 +171,7 @@ public class Main extends Application {
         HBox finalLayout = new HBox(10);
 
         Label infoCard = new Label("Hover over options to see more");
-        layout1.getChildren().addAll(welcomeLabel, input, infoCard, buttons, inputOrReported, output);
+        layout1.getChildren().addAll(welcomeLabel, input, infoCard, buttons, moreButtons, output);
         RobotState robotState = new RobotState();
         robotState.setX(40);
         robotState.setY(30);
@@ -190,5 +199,4 @@ public class Main extends Application {
     double getDFCB(CheckBox c) {
         return c.isSelected() ? 1 : 0;
     }
-
 }

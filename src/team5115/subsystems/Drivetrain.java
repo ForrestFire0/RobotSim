@@ -118,8 +118,6 @@ public class Drivetrain implements DriveBase {
     public double getAvgSpd() {
         double rightSpd = frontRight.getSelectedSensorVelocity();
         double leftSpd = -backLeft.getSelectedSensorVelocity();
-        final double wheelSpd = ((rightSpd + leftSpd) / (double) 2) * 1.53846 * Math.PI / 4090;
-        System.out.println("Wheel Speeds = " + wheelSpd);
-        return wheelSpd;
+        return ((rightSpd + leftSpd) / (double) 2) * 1.53846 * Math.PI / 4090;
     }
 }

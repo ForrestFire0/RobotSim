@@ -12,12 +12,10 @@ public class AHRS {
     }
 
     public double getYaw() {
-        System.out.println(yaw);
         return yaw;
     }
 
     public double getAngle() {
-        System.out.println(angle);
         return angle;
     }
 }

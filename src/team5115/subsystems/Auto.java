@@ -38,25 +38,25 @@ public class Auto {
         this.dt = dt;
         this.navX = navX;
 
-        if(dt.getAvgSpd() > 0.1) {
+        if (dt.getAvgSpd() > 0.1) {
             ErrList.reportError(new Exception("Avg speed at start too high. Should be < 0.1, currently: " + dt.getAvgSpd()));
         }
 
-        tx = new NetworkTableEntry();
-        ty = new NetworkTableEntry();
-        tv = new NetworkTableEntry();
-        pipeline = new NetworkTableEntry();
+        tx = new NetworkTableEntry("tx");
+        ty = new NetworkTableEntry("ty");
+        tv = new NetworkTableEntry("tv");
+        pipeline = new NetworkTableEntry("pipeline");
         pipeline.setNumber(0);
         currentPipeline = 0;
         SimpleAutoSeries.reset();
         currentStep = SimpleAutoSeries.getCurrentStep();//get the first step to work on.
 
-        System.out.println("Starting Autonomous. Starting Step 1: "  + currentStep);
+        System.out.println("Starting Autonomous. Starting Step 1: " + currentStep);
     }
 
     public void runAuto() {
 
-        if(finished) {
+        if (finished) {
             dt.stop();
             System.out.println("Restart Auto Using button 9");
             return;
@@ -115,10 +115,12 @@ public class Auto {
                         if (basicVA(currentStep, false)) {
                             currentStep.nextStage();
                         }
+                        break;
                     case 2:
-                        if(basicVA(currentStep, true)) {
+                        if (basicVA(currentStep, true)) {
                             currentStep.nextStage();
                         }
+                        break;
                 }
         }
 
@@ -130,12 +132,12 @@ public class Auto {
                 System.out.println("Nice! You finished the auto routine! Congrats from Forrest in the past!");
                 finished = true;
             } else
-            System.out.println("Moved on to next step, which is: " + currentStep);
+                System.out.println("Moved on to next step, which is: " + currentStep);
         }
     }
 
     private boolean deadRecon(Instruction step) {
-        dt.angleHold(currentAngle, step.getOrientation() - 180, maxForwardSpeed/2); //look strait into the portal.
+        dt.angleHold(currentAngle, step.getOrientation() - 180, maxForwardSpeed / 2); //look strait into the portal.
         return false; //todome This needs to stop when the step has completed.
     }
 
@@ -151,7 +153,7 @@ public class Auto {
     private boolean basicVA(Instruction currentStep, boolean moveForward) {
         setPipeline(currentStep.getPipeline()); //this ensures that we are looking at the right pipeline for the object.
         double angle;
-        if (tv.getDouble(0) == 1) { // if we dont have a target
+        if (tv.getDouble(0) == 1) { // if we have a target
             angle = tx.getDouble(0) + currentAngle;
         } else {
             ErrList.reportError(new Exception("No target found. Pointing at object."));
@@ -159,12 +161,12 @@ public class Auto {
             return false;
         }
 
-        double throttle = moveForward? 3/tx.getDouble(180) : 0; //3 degrees off is full throttle
+        double throttle = moveForward ? 3 / tx.getDouble(180) : 0; //3 degrees off is full throttle
         throttle = min(throttle, maxForwardSpeed); //max speed 0.5. Also add a minimum speed of 0.1.
         dt.angleHold(currentAngle, angle, throttle);
 
-        if(!moveForward) {
-            return abs(angle) < maxAngleError;
+        if (!moveForward) {
+            return abs(angle - currentAngle) < maxAngleError;
         } else {
             return doWeHaveACubeYet();
         }
@@ -252,7 +254,7 @@ public class Auto {
         //System.out.println(ty.getDouble(0) + cameraAngle + " = angle");
         //System.out.print("/" + Math.tan(Math.toRadians(ty.getDouble(0) + cameraAngle)));
         double txTEMP = tx.getDouble(0);
-        if(txTEMP < 0.001) {
+        if (txTEMP < 0.001) {
             ErrList.reportError(new Exception("tx not logical."));
         }
         double yaw = currentAngle + txTEMP; //angle from the wall. Remember: negative is pointing to left, positive is to the right.
