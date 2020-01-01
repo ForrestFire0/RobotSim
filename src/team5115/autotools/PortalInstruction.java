@@ -35,6 +35,11 @@ public class PortalInstruction extends Instruction {
     public double getOrientation() {
         return orientation;
     }
+
+    @Override
+    public boolean hasOrientation() {
+        return false;
+    }
 }
 
 /*

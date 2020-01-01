@@ -1,10 +1,7 @@
 package team5115.subsystems;
 
 import sample.Emulator.NetworkTableEntry;
-import team5115.autotools.DriveBase;
-import team5115.autotools.ErrList;
-import team5115.autotools.Instruction;
-import team5115.autotools.SimpleAutoSeries;
+import team5115.autotools.*;
 
 import static java.lang.Math.*;
 
@@ -19,8 +16,8 @@ public class Auto {
     private NetworkTableEntry tv;
     private NetworkTableEntry pipeline;
 
-    private double xLoc;
-    private double yLoc;
+    public double xLoc;
+    public double yLoc;
     private double currentAngle;
     private Instruction currentStep;
 
@@ -34,13 +31,31 @@ public class Auto {
      * Creates the limelight table entries.
      */
     // Load in the network tables
-    public Auto(DriveBase dt, NavX navX) {
+    public Auto(DriveBase dt, NavX navX, StartingConfiguration x, double startY) {
         this.dt = dt;
         this.navX = navX;
 
         if (dt.getAvgSpd() > 0.1) {
             ErrList.reportError(new Exception("Avg speed at start too high. Should be < 0.1, currently: " + dt.getAvgSpd()));
         }
+
+        switch (x) {
+            case Port:
+                xLoc = 40;
+                break;
+            case Starboard:
+                xLoc = 160;
+                break;
+            case Middle:
+                xLoc = 100;
+                break;
+            case Zero:
+                xLoc = 0;
+                break;
+        }
+        yLoc = startY;
+        System.out.println("yLoc = " + yLoc);
+        System.out.println("xLoc = " + xLoc);
 
         tx = new NetworkTableEntry("tx");
         ty = new NetworkTableEntry("ty");
@@ -85,7 +100,7 @@ public class Auto {
                         }
                         break;
                     case 3:
-                        if (aim(currentStep.getOrientation())) { //aim at an angle
+                        if (currentStep.hasOrientation()|| aim(currentStep.getOrientation())) { //aim at an angle
                             currentStep.nextStage();
                         }
                         break;

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.function.BiConsumer;
 
 public class StartRobotState {
+    private double x;
+    private double y;
     private double currentAngle;
     private double tv;
     private double ty;
@@ -13,7 +15,9 @@ public class StartRobotState {
     private ArrayList<Integer> encoders = new ArrayList<>();
     private Joystick joystick;
 
-    public StartRobotState(double currentAngle, double tv, double ty, double tx, double rightspd, double leftspd, Joystick joystick) {
+    public StartRobotState(double x, double y, double currentAngle, double tv, double ty, double tx, double rightspd, double leftspd, Joystick joystick) {
+        this.x = x;
+        this.y = y;
         this.currentAngle = currentAngle;
         this.tv = tv;
         this.ty = ty;
@@ -50,10 +54,18 @@ public class StartRobotState {
         return tx;
     }
 
-    public void addToList(HashMap<String, Double> list) {
+    public void addList(HashMap<String, Double> list) {
         list.put("tx", tx);
         list.put("ty", ty);
         list.put("tv", tv);
         list.put("pipeline", pipeline);
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
     }
 }

@@ -10,7 +10,7 @@ public class RobotWrapper {
     public static StartRobotState srs;
     public static RobotState ers;
 
-    static RobotState runTick(StartRobotState startRobotState) {
+    static RobotState runTick(StartRobotState startRobotState, boolean locationAllowed) {
 
         srs = startRobotState;
         //set things like location and encoder values from the Start Robot State.
@@ -19,7 +19,13 @@ public class RobotWrapper {
         //run the tick
         AHRS.angle = srs.getCurrentAngle();
         AHRS.yaw = srs.getCurrentAngle();
-        srs.addToList(NetworkTableEntry.getList());
+        srs.addList(NetworkTableEntry.getList());
+
+        if (locationAllowed) {
+            robot.auto.yLoc = srs.getY();
+            robot.auto.xLoc = srs.getX();
+        }
+
         robot.autonomousPeriodic();
 
         //push everything into the End Robot State (Robot state)
@@ -31,6 +37,7 @@ public class RobotWrapper {
         ers.setY(deltaY);
         ers.setTalonSRXES(MyTalonSRX.getTalonSRXES());
         ers.setRequestedAngle(MyTalonSRX.getRequestedAngle());
+        ers.setCurrentStep(SimpleAutoSeries.getCurrentStep());
         return ers;
     }
 

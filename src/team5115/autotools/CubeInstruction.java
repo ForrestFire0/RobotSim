@@ -28,11 +28,16 @@ public class CubeInstruction extends Instruction {
     }
 
     @Override
+    public boolean hasOrientation() {
+        return false;
+    }
+
+    @Override
     public double getOrientation() {
         try {
             throw new Throwable("Error! Cannot get Orientation from a cube!");
         } catch (Throwable throwable) {
-            System.out.println("Somehow you failed to fail. (Cube Instructions Ln35)");
+            System.out.println("Somehow you failed to fail. (Cube Instructions Ln44)");
         }
         return 0;
     }

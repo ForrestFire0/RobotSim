@@ -1,6 +1,7 @@
 package team5115.robot;
 import sample.Emulator.Joystick;
 import team5115.autotools.DriveBase;
+import team5115.autotools.StartingConfiguration;
 import team5115.subsystems.*;
 
 //todome make a calibration method to move it to a certain distance and know the angle.
@@ -8,13 +9,13 @@ public class Robot {
     private Joystick joy;
     public DriveBase dt;
     private NavX navX;
-    private Auto auto;
+    public Auto auto;
 
     public void robotInit() {
         joy = new Joystick(0);
         navX = new NavX();
         dt = new Drivetrain(navX);
-        auto = new Auto(dt, navX);
+        auto = new Auto(dt, navX, StartingConfiguration.Port,30);
         dt.resetTargetAngle(); //set the target angle to where we are looking.
     }
 

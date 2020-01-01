@@ -4,6 +4,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
+import javax.annotation.processing.Generated;
 import java.util.ArrayList;
 
 public class GridPaneGenerator {
@@ -54,5 +55,11 @@ public class GridPaneGenerator {
         }
         System.err.println("You fucked up. Tryna get " + name + " and we couldn't find it.");
         return new TextField("0");
+    }
+
+    public void reset(String y) {
+        for (CheckBox x : checkBoxes) {
+            if (x.getText().equals(y)) x.fire();
+        }
     }
 }

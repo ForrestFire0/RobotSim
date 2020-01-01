@@ -3,10 +3,17 @@ package team5115.autotools;
 public class LocationInstruction extends Instruction{
 
     private double orientation;
+    private boolean hasOrientation;
 
     LocationInstruction(double x, double y, double orientation) {
         super(x,y);
         this.orientation = orientation;
+        hasOrientation = true;
+    }
+
+    public LocationInstruction(double x, double y) {
+        super(x, y);
+        hasOrientation = false;
     }
 
     public double getOrientation() {
@@ -35,6 +42,10 @@ public class LocationInstruction extends Instruction{
     @Override
     public boolean finishedWithStep() {
         return stage == 4;
+    }
+
+    public boolean hasOrientation() {
+        return hasOrientation;
     }
 }
 /*

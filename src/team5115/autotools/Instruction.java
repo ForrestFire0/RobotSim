@@ -43,4 +43,6 @@ abstract public class Instruction {
     abstract public String toString();
 
     public abstract boolean finishedWithStep();
+
+    public abstract boolean hasOrientation();
 }

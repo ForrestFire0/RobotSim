@@ -1,34 +1,38 @@
 package sample;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import javafx.util.Duration;
 import sample.Emulator.Joystick;
 import sample.Emulator.MyTalonSRX;
 import sample.Emulator.RobotState;
 import sample.Emulator.StartRobotState;
 import sample.Graphics.Drawer;
 import sample.Graphics.GridPaneGenerator;
+import sample.Graphics.HelpMenu;
 
 import java.util.ArrayList;
 
-public class Main extends Application {
+public class Main extends javafx.application.Application {
     final Canvas canvas = new Canvas(Drawer.windowX, Drawer.windowY);
     final GraphicsContext gc = canvas.getGraphicsContext2D();
-    boolean autoMove = true;
+    boolean autoMove = false;
+    public boolean locationAllowed = false;
 
     @Override
     public void start(Stage primaryStage) {
+        Drawer.init(gc);
         //Set up inputs
-
         GridPaneGenerator pyspropgen = new GridPaneGenerator();
         pyspropgen.add("X", 40, true);
         pyspropgen.add("Y", 30, true);
@@ -59,11 +63,21 @@ public class Main extends Application {
         //Set up outputs.
         GridPaneGenerator wheeloutputsGen = new GridPaneGenerator();
         GridPaneGenerator requestedAngleGen = new GridPaneGenerator();
-        requestedAngleGen.add("Requested Angle", 127,false);
+        requestedAngleGen.add("Requested Angle", 127, false);
         TitledPane requestedAngle = new TitledPane("Requested Angle", requestedAngleGen.generate());
-//        requestedAngle.setExpanded(true);
 
+        canvas.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                t -> {
+                    double x = t.getX();
+                    double y = t.getY();
+                    double temp = y;
 
+                    y = (x - 20) / 2;
+                    x = (temp - 20) / 2;
+
+                    pyspropgen.get("X").setText(String.valueOf(x));
+                    pyspropgen.get("Y").setText(String.valueOf(y));
+                });
         //run the robot tick.
         RobotWrapper.instanciate();
 
@@ -79,6 +93,7 @@ public class Main extends Application {
         VBox output = new VBox(wheelOutputs, requestedAngle);
 
         Button runTick = new Button("Run Tick");
+        runTick.setTooltip(new Tooltip("Click to run the robots autonomous or teleop periodic (set in RobotWrapper)"));
         runTick.setOnAction(e -> {
             Joystick joy = new Joystick(0);
             ArrayList<Double> axis = new ArrayList<>();
@@ -87,25 +102,28 @@ public class Main extends Application {
             joy.setAxis(axis);
             ArrayList<Boolean> buttons = joy.getButtons();
             buttons.set(8, true);
+            joy.setButtons(buttons);
+
             //set up the inputs (set start robot state)
             StartRobotState state = new StartRobotState(
+                    getDFTF(pyspropgen.get("X")),
+                    getDFTF(pyspropgen.get("Y")),
                     getDFTF(pyspropgen.get("orientation")),
                     getDFTF(limelightgen.get("tv")),
                     getDFTF(limelightgen.get("ty")),
                     getDFTF(limelightgen.get("tx")),
                     getDFTF(encodergen.get("left encoder spd")),
                     -getDFTF(encodergen.get("right encoder spd")),
-                    joy);
-            //get the result
-            RobotState result = RobotWrapper.runTick(state);
-            requestedAngleGen.get("Requested Angle").setText(String.valueOf(
-                    Math.round(
-                    result.getRequestedAngle()))
+                    joy
             );
 
-            System.out.println("Using automove: = " + autoMove);
+            //get the result
+            RobotState result = RobotWrapper.runTick(state, locationAllowed);
+
+            requestedAngleGen.get("Requested Angle").setText(String.valueOf(Math.round(result.getRequestedAngle())));
+
             //setup the x and y for the drawer
-            if(autoMove) { //set x and y
+            if (autoMove) { //set x and y
                 result.setX(getDFTF(pyspropgen.get("X")) + result.getX());
                 result.setY(getDFTF(pyspropgen.get("Y")) + result.getY());
                 pyspropgen.get("X").setText(String.valueOf(result.getX()));
@@ -116,8 +134,10 @@ public class Main extends Application {
                 result.setY(getDFTF(pyspropgen.get("Y")));
                 result.setRequestedAngle(getDFTF(pyspropgen.get("orientation")));
             }
+            System.out.println("autoMove = " + autoMove);
+            System.out.println("result.getRequestedAngle() = " + result.getRequestedAngle());
             //draw the robot.
-            Drawer.drawRobot(gc, result);
+            Drawer.drawRobot(result);
             //set the values in the outputs
 
             for (MyTalonSRX x : talonSRXES) {
@@ -137,31 +157,30 @@ public class Main extends Application {
                             Math.abs(
                                     getDFTF(
                                             wheeloutputsGen.get("TalonSRX@prt1")) * 1000
-                            )
-                    )
-            );
+                            )));
             encodergen.get("right encoder spd").setText(
                     String.valueOf(
                             Math.abs(
                                     getDFTF(
                                             wheeloutputsGen.get("TalonSRX@prt2")) * 1000
-                            )
-                    )
-            );
+                            )));
         });
 
         CheckBox inputOrReported = new CheckBox("AutoMove");
         inputOrReported.setTooltip(new Tooltip("Select to automatically move and\nrotate the graphical representation\nof the robot."));
-        inputOrReported.setOnAction(e -> autoMove = !autoMove);
-        inputOrReported.setSelected(true);
+        inputOrReported.setOnAction(e -> autoMove = inputOrReported.isSelected());
 
         Button printErrors = new Button("Print Errors");
         printErrors.setTooltip(new Tooltip("Press to print out the errors from ErrList to the println"));
-        inputOrReported.setOnAction(e -> RobotWrapper.printErrList()
+        printErrors.setOnAction(e -> RobotWrapper.printErrList()
         );
 
+        CheckBox l = new CheckBox("Allow Location");
+        l.setTooltip(new Tooltip("Check to allow robot to\nknow its location"));
+        l.setOnAction(e -> locationAllowed = l.isSelected());
+
         HBox buttons = new HBox(runTick, resetSeries, setEncoderVals);
-        HBox moreButtons = new HBox(inputOrReported, printErrors);
+        HBox moreButtons = new HBox(inputOrReported, l, printErrors);
 
         Label welcomeLabel = new Label("Welcome to RobotSim!");
         welcomeLabel.setFont(new Font(30));
@@ -171,16 +190,24 @@ public class Main extends Application {
         HBox finalLayout = new HBox(10);
 
         Label infoCard = new Label("Hover over options to see more");
-        layout1.getChildren().addAll(welcomeLabel, input, infoCard, buttons, moreButtons, output);
+        Button helpButton = new Button("Help");
+        helpButton.setOnAction(e -> HelpMenu.KABOOM());
+        layout1.getChildren().addAll(welcomeLabel, input, infoCard, buttons, moreButtons, output, helpButton);
         RobotState robotState = new RobotState();
         robotState.setX(40);
         robotState.setY(30);
         robotState.setRequestedAngle(0);
 
-        Drawer.drawRobot(gc, robotState);
+        Drawer.drawRobot(robotState);
 
         finalLayout.getChildren().addAll(layout1, canvas);
-        Scene home = new Scene(finalLayout, 1700, Drawer.windowY + 50);
+        Scene home = new Scene(finalLayout, 1700, Drawer.windowY + 100);
+        finalLayout.setOnKeyPressed(e -> {
+            if(e.getCode() == KeyCode.ESCAPE) {
+                pyspropgen.reset("X");
+                pyspropgen.reset("Y");
+            }
+        });
 
         primaryStage.setScene(home);
         primaryStage.setTitle("RobotSim");
