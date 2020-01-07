@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -12,7 +13,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import javafx.util.Duration;
 import sample.Emulator.Joystick;
 import sample.Emulator.MyTalonSRX;
 import sample.Emulator.RobotState;
@@ -28,6 +28,7 @@ public class Main extends javafx.application.Application {
     final GraphicsContext gc = canvas.getGraphicsContext2D();
     boolean autoMove = false;
     public boolean locationAllowed = false;
+    final static Image icon = new Image("/icon.jpg");
 
     @Override
     public void start(Stage primaryStage) {
@@ -40,11 +41,11 @@ public class Main extends javafx.application.Application {
         TitledPane physicalProperties = new TitledPane("Physical Properties", pyspropgen.generate());
 
         GridPaneGenerator limelightgen = new GridPaneGenerator();
-        limelightgen.add("tx", 0, false);
-        limelightgen.add("ty", 0, false);
-        limelightgen.add("tv", 0, false);
+        limelightgen.add("tx", 0, true);
+        limelightgen.add("ty", 0, true);
+        limelightgen.add("tv", 1, false);
         TitledPane limelight = new TitledPane("Limelight", limelightgen.generate());
-        limelight.setExpanded(false);
+        limelight.setExpanded(true);
 
         GridPaneGenerator joystickgen = new GridPaneGenerator();
         joystickgen.add("x axis", 0, false);
@@ -63,7 +64,7 @@ public class Main extends javafx.application.Application {
         //Set up outputs.
         GridPaneGenerator wheeloutputsGen = new GridPaneGenerator();
         GridPaneGenerator requestedAngleGen = new GridPaneGenerator();
-        requestedAngleGen.add("Requested Angle", 127, false);
+        requestedAngleGen.add("Requested Angle", 0, false);
         TitledPane requestedAngle = new TitledPane("Requested Angle", requestedAngleGen.generate());
 
         canvas.addEventHandler(MouseEvent.MOUSE_CLICKED,
@@ -134,8 +135,6 @@ public class Main extends javafx.application.Application {
                 result.setY(getDFTF(pyspropgen.get("Y")));
                 result.setRequestedAngle(getDFTF(pyspropgen.get("orientation")));
             }
-            System.out.println("autoMove = " + autoMove);
-            System.out.println("result.getRequestedAngle() = " + result.getRequestedAngle());
             //draw the robot.
             Drawer.drawRobot(result);
             //set the values in the outputs
@@ -208,9 +207,9 @@ public class Main extends javafx.application.Application {
                 pyspropgen.reset("Y");
             }
         });
-
-        primaryStage.setScene(home);
+        primaryStage.getIcons().add(icon);
         primaryStage.setTitle("RobotSim");
+        primaryStage.setScene(home);
         primaryStage.show();
     }
 

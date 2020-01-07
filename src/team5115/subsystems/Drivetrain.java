@@ -81,27 +81,10 @@ public class Drivetrain implements DriveBase {
     }
 
     public void driveByWire(double x, double y) { //rotate by wire
+        navX.runTick();
         double currentAngle = navX.getAngle();
         targetAngle += x*2.5; //at 50 ticks a second, this is 50 degrees a second because the max x is 1.
         angleHold(currentAngle, targetAngle, y);
-    }
-
-    public void tester() {
-        System.out.println("Starting Tester.");
-        System.out.println("Setting backright to full speed.");
-        double maxMotorSpeed = 0;
-        for (double i = 0; i < 1; i+=0.1) {
-            backRight.set(ControlMode.PercentOutput, i);
-            delay(50);
-        }
-        System.out.println("Motor on. Collecting values");
-        for(int i = 0; i < 100; i++) {
-           maxMotorSpeed = Math.max(backRight.getSelectedSensorVelocity(), maxMotorSpeed);
-           delay(10);
-        }
-
-        backRight.set(ControlMode.PercentOutput, 0);
-        System.out.println("Done collecting. Max speed was " + maxMotorSpeed);
     }
 
     void delay(double millis) {

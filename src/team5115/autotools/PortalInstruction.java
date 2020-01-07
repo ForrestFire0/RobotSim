@@ -23,8 +23,7 @@ public class PortalInstruction extends Instruction {
                 " x=" + x +
                 " y=" + y +
                 " and orientation=" + orientation +
-                " stage=" + stage +
-                '}';
+                " stage=" + stage;
     }
     @Override
     public boolean finishedWithStep() {

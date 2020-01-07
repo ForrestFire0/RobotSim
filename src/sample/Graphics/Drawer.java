@@ -19,7 +19,7 @@ public class Drawer {
     }
 
     private static void drawField() {
-        gc.clearRect(0,0,windowX,windowY);
+        gc.clearRect(0, 0, windowX, windowY);
         gc.drawImage(image, 205, 34, 1110, 547, 20, 20, windowX, windowY);
     }
 
@@ -30,8 +30,8 @@ public class Drawer {
         double y = robotState.getY();
 
         double temp = y;
-        y = x*2 + 20;
-        x = temp*2 + 20;
+        y = x * 2 + 20;
+        x = temp * 2 + 20;
 
         drawField();
 
@@ -60,20 +60,23 @@ public class Drawer {
         double x = instruction.getX();
         double y = instruction.getY();
         double temp = y;
-        y = x*2 + 20;
-        x = temp*2 + 20;
+        y = x * 2 + 20;
+        x = temp * 2 + 20;
 
         switch (instruction.getType()) {
             case "Location":
                 gc.setFill(Color.BLUE);
-                gc.fillRect(x-20, y-20, 40, 40);
+                gc.fillRect(x - 20, y - 20, 40, 40);
 
                 break;
             case "Portal":
+                gc.setFill(Color.LIMEGREEN);
+                int rS = 50; //rect size
+                gc.fillRect(x - rS / 2, y - rS / 2, rS, rS);
                 break;
             case "Cube":
                 gc.setFill(Color.YELLOW);
-                gc.fillRect(x, y, 10, 10);
+                gc.fillRect(x - 5, y - 5, 10, 10);
                 break;
             default:
                 try {

@@ -26,14 +26,14 @@ public class NavX {
     /**
      * @return totalAccumulated Angle -gazillion to a gazillion
      */
-    double getAngle() {
+    public double getAngle() {
         return angle;
     }
 
     /**
      * @return angle -180 to 180
      */
-    double getYaw() {
+    public double getYaw() {
         return yaw;
     }
 

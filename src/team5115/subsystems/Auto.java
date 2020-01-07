@@ -53,6 +53,7 @@ public class Auto {
                 xLoc = 0;
                 break;
         }
+
         yLoc = startY;
         System.out.println("yLoc = " + yLoc);
         System.out.println("xLoc = " + xLoc);
@@ -109,8 +110,10 @@ public class Auto {
                 }
                 break;
             case "Portal":
+                System.out.println("Running Portal");
                 switch (currentStep.getStage()) {
                     case 1:
+                        System.out.println("Lining up");
                         if (lineUp(currentStep)) {
                             currentStep.nextStage();
                         }
@@ -236,7 +239,7 @@ public class Auto {
         return abs(currentAngle - angle) < maxAngleError; //If we are close to our target.
     }
 
-    public void IMUCalc() { //update the current location of the robot based on the Accelerometer. This is some serious bulshit right here.
+    public void IMUCalc() { //update the current location of the robot based on the Encoders.
 
         currentAngle = navX.getAngle();
         double forwardSpeed = dt.getAvgSpd();
@@ -245,7 +248,7 @@ public class Auto {
         yLoc += deltaY; //adds deltas to total.
         xLoc += deltaX; //adds deltas to total
         System.out.println("IMUCalC: CurrentAngle: " + (int) currentAngle + "|yLoc: " + (int) yLoc + "|xLoc: " + (int) xLoc);
-        System.out.println("Delta X: " + deltaX + "|Delta Y: " + deltaY);
+//        System.out.println("Delta X: " + deltaX + "|Delta Y: " + deltaY);
 //        System.out.println("YVelocity: " + forwardSpeed);
     }
 
@@ -265,7 +268,8 @@ public class Auto {
         final double targetHeight = 36; //is it 36 inches???
         final double cameraHeight = 8; //update but it probably doesn't matter.
         final double cameraAngle = 23; //update
-        double hypotenuse = (targetHeight - cameraHeight) / tan(toRadians(ty.getDouble(0) + cameraAngle)); //
+        double hypotenuse = (targetHeight - cameraHeight) / tan(toRadians(ty.getDouble(0) + cameraAngle));
+        System.out.println("hypotenuse = " + hypotenuse);
         //System.out.println(ty.getDouble(0) + cameraAngle + " = angle");
         //System.out.print("/" + Math.tan(Math.toRadians(ty.getDouble(0) + cameraAngle)));
         double txTEMP = tx.getDouble(0);
@@ -375,10 +379,10 @@ public class Auto {
 
         double[] locs = locFromLL();//acquire new points, aka xOffset and yOffset. Adjust them to be robot center oriented.
 
-        //System.out.println("main: X: " + (int) xOffset + " Y: " + (int) yOffset + " Angle: " + (int) getYaw);
-
         double xOffset = locs[0];
         double yOffset = locs[1];
+        System.out.print("xOffset = " + xOffset);
+        System.out.println("   yOffset = " + yOffset);
         double targetAngle;
         double targetY = locateTargetPoint(yOffset);
         System.out.println("findAngle: TargetY: " + targetY);
@@ -393,7 +397,8 @@ public class Auto {
         System.out.println(followingTrackSpeed);
         dt.angleHold(currentAngle, targetAngle, followingTrackSpeed);//followingTrackSpeed);
 
-        return yOffset > -20;
+        System.out.println("yOffset = " + yOffset);
+        return abs(yOffset) < 20;
     }
 
     /**
